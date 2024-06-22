@@ -30,6 +30,23 @@ function addTransaction(transaction) {
   const li = document.createElement("li");
   li.textContent = `${transaction.date} - ${transaction.description}: ${transaction.amount} (${transaction.category})`;
   transactionList.appendChild(li);
+
+  const removeBtn = document.createElement("button");
+  removeBtn.textContent = "Remove";
+  removeBtn.onclick = () => removeTransaction(transaction, li);
+  li.appendChild(removeBtn);
+
+  transactionList.appendChild(li);
+}
+
+function removeTransaction(transaction, li) {
+  const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+  const updatedTransactions = transactions.filter(
+    (t) =>
+      t.description !== transaction.description || t.date !== transaction.date
+  );
+  localStorage.setItem("transactions", JSON.stringify(updatedTransactions));
+  li.remove();
 }
 
 function saveTransaction(transaction) {
@@ -42,3 +59,18 @@ function loadTransactions() {
   const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
   transactions.forEach((transaction) => addTransaction(transaction));
 }
+
+document.getElementById("search").addEventListener("input", function (e) {
+  const searchTerm = e.target.value.toLowerCase();
+  const transactionList = document.getElementById("transaction-list");
+  transactionList.innerHTML = ""; // Empty list
+
+  const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+  const filteredTransactions = transactions.filter(
+    (transaction) =>
+      transaction.description.toLowerCase().includes(searchTerm) ||
+      transaction.category.toLowerCase().includes(searchTerm)
+  );
+
+  filteredTransactions.forEach((transaction) => addTransaction(transaction));
+});
