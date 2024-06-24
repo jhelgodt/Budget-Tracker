@@ -50,13 +50,11 @@ document
     e.preventDefault();
     const description = document.getElementById("description").value;
     const amount = document.getElementById("amount").value;
-    const category = document.getElementById("category").value;
 
-    if (description && amount && category) {
+    if (description && amount) {
       const transaction = {
         description,
         amount: parseFloat(amount),
-        category,
         date: new Date().toLocaleString(),
       };
       addTransaction(transaction);
@@ -71,7 +69,7 @@ document
 function addTransaction(transaction) {
   const transactionList = document.getElementById("transaction-list");
   const li = document.createElement("li");
-  li.textContent = `${transaction.date} - ${transaction.description}: ${transaction.amount} (${transaction.category})`;
+  li.textContent = `${transaction.date} - ${transaction.description}: ${transaction.amount})`;
 
   const removeBtn = document.createElement("button");
   removeBtn.textContent = "Remove";
@@ -111,10 +109,8 @@ document.getElementById("search").addEventListener("input", function (e) {
   transactionList.innerHTML = ""; // Empty list
 
   const transactions = JSON.parse(localStorage.getItem("transactions")) || [];
-  const filteredTransactions = transactions.filter(
-    (transaction) =>
-      transaction.description.toLowerCase().includes(searchTerm) ||
-      transaction.category.toLowerCase().includes(searchTerm)
+  const filteredTransactions = transactions.filter((transaction) =>
+    transaction.description.toLowerCase().includes(searchTerm)
   );
 
   filteredTransactions.forEach((transaction) => addTransaction(transaction));
