@@ -1,5 +1,47 @@
+let chart; // Declare chart variable
+
+function generateChart(transactions) {
+  const ctx = document.getElementById("myChart").getContext("2d");
+  const income = transactions
+    .filter((t) => t.amount > 0)
+    .reduce((sum, t) => sum + t.amount, 0);
+  const expenses = transactions
+    .filter((t) => t.amount < 0)
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  if (chart) {
+    chart.destroy(); // Destroy the old chart before creating a new one
+  }
+  chart = new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: ["Income", "Expenses"],
+      datasets: [
+        {
+          label: "Budget Distribution",
+          data: [income, Math.abs(expenses)],
+          backgroundColor: ["#36a2eb", "#ff6384"],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top",
+        },
+        title: {
+          display: true,
+          text: "Income vs Expenses",
+        },
+      },
+    },
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   loadTransactions();
+  generateChart(JSON.parse(localStorage.getItem("transactions")) || []);
 });
 
 document
@@ -20,6 +62,7 @@ document
       addTransaction(transaction);
       saveTransaction(transaction);
       document.getElementById("transaction-form").reset();
+      generateChart(JSON.parse(localStorage.getItem("transactions")) || []);
     } else {
       alert("Please fill in all fields");
     }
@@ -29,11 +72,12 @@ function addTransaction(transaction) {
   const transactionList = document.getElementById("transaction-list");
   const li = document.createElement("li");
   li.textContent = `${transaction.date} - ${transaction.description}: ${transaction.amount} (${transaction.category})`;
-  transactionList.appendChild(li);
 
   const removeBtn = document.createElement("button");
   removeBtn.textContent = "Remove";
-  removeBtn.onclick = () => removeTransaction(transaction, li);
+  removeBtn.onclick = () => {
+    removeTransaction(transaction, li);
+  };
   li.appendChild(removeBtn);
 
   transactionList.appendChild(li);
@@ -47,6 +91,7 @@ function removeTransaction(transaction, li) {
   );
   localStorage.setItem("transactions", JSON.stringify(updatedTransactions));
   li.remove();
+  generateChart(updatedTransactions);
 }
 
 function saveTransaction(transaction) {
@@ -73,4 +118,5 @@ document.getElementById("search").addEventListener("input", function (e) {
   );
 
   filteredTransactions.forEach((transaction) => addTransaction(transaction));
+  generateChart(filteredTransactions);
 });
