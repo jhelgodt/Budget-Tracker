@@ -2,12 +2,26 @@ let chart; // Declare chart variable
 
 function generateChart(transactions) {
   const ctx = document.getElementById("myChart").getContext("2d");
-  const income = transactions
-    .filter((t) => t.amount > 0)
-    .reduce((sum, t) => sum + t.amount, 0);
-  const expenses = transactions
-    .filter((t) => t.amount < 0)
-    .reduce((sum, t) => sum + t.amount, 0);
+  const categories = [
+    "Savings",
+    "Income (Insurance agency)",
+    "Income (Rent)",
+    "Income (Tax refund)",
+    "Housing",
+    "Electronics",
+    "Insurance and fees",
+    "Health",
+    "Food and groceries",
+    "Personal care",
+    "Education",
+    "Transportation",
+    "Entertainment",
+  ];
+  const categoryAmounts = categories.map((category) =>
+    transactions
+      .filter((t) => t.category === category && t.amount !== 0)
+      .reduce((sum, t) => sum + t.amount, 0)
+  );
 
   if (chart) {
     chart.destroy(); // Destroy the old chart before creating a new one
@@ -15,12 +29,27 @@ function generateChart(transactions) {
   chart = new Chart(ctx, {
     type: "pie",
     data: {
-      labels: ["Income", "Expenses"],
+      labels: categories,
       datasets: [
         {
           label: "Budget Distribution",
-          data: [income, Math.abs(expenses)],
-          backgroundColor: ["#36a2eb", "#ff6384"],
+          data: categoryAmounts,
+          backgroundColor: [
+            "#36a2eb",
+            "#ff6384",
+            "#ffce56",
+            "#ff9f40",
+            "#4bc0c0",
+            "#9966ff",
+            "#c45850",
+            "#00aaff",
+            "#ff7f50",
+            "#32cd32",
+            "#ba55d3",
+            "#8b4513",
+            "#20b2aa",
+            "#ff69b4",
+          ],
         },
       ],
     },
@@ -32,7 +61,7 @@ function generateChart(transactions) {
         },
         title: {
           display: true,
-          text: "Income vs Expenses",
+          text: "Budget distribution",
         },
       },
     },
@@ -50,12 +79,14 @@ document
     e.preventDefault();
     const description = document.getElementById("description").value;
     const amount = document.getElementById("amount").value;
+    const category = document.getElementById("category").value;
 
     if (description && amount) {
       const transaction = {
         description,
         amount: parseFloat(amount),
         date: new Date().toLocaleString(),
+        category,
       };
       addTransaction(transaction);
       saveTransaction(transaction);
@@ -69,7 +100,7 @@ document
 function addTransaction(transaction) {
   const transactionList = document.getElementById("transaction-list");
   const li = document.createElement("li");
-  li.textContent = `${transaction.date} - ${transaction.description}: ${transaction.amount})`;
+  li.textContent = `${transaction.date} - ${transaction.description}: ${transaction.amount} (${transaction.category})`;
 
   const removeBtn = document.createElement("button");
   removeBtn.textContent = "Remove";

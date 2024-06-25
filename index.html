@@ -3,23 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Budget tracker</title>
+    <title>Budget Tracker</title>
     <link rel="stylesheet" type="text/css" href="styles.css" />
   </head>
   <body>
-    <div class="containern">
+    <div class="container">
       <h1>Budget Tracker</h1>
       <form id="transaction-form">
+        <label for="description">Description:</label>
         <input
           type="text"
           id="description"
           placeholder="Description"
           required
         />
+
+        <label for="amount">Amount:</label>
         <input type="number" id="amount" placeholder="Amount" required />
+
+        <label for="category">Category:</label>
+        <select id="category">
+          <option value="Savings">Savings</option>
+          <option value="Income (Insurance agency)">
+            Income (Insurance agency)
+          </option>
+          <option value="Income (Rent)">Income (Rent)</option>
+          <option value="Income (Tax refund)">Income (Tax refund)</option>
+          <option value="Housing">Housing</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Insurance and fees">Insurance and fees</option>
+          <option value="Health">Health</option>
+          <option value="Food and groceries">Food and groceries</option>
+          <option value="Personal care">Personal care</option>
+          <option value="Education">Education</option>
+          <option value="Transportation">Transportation</option>
+          <option value="Entertainment">Entertainment</option>
+        </select>
 
         <button type="submit">Add Transaction</button>
       </form>
+
       <input type="text" id="search" placeholder="Search transactions" />
       <ul id="transaction-list"></ul>
       <canvas id="myChart" width="400" height="400"></canvas>
