@@ -69,6 +69,7 @@ function generateChart(transactions) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
+  initializeDateSelectors();
   loadTransactions();
   generateChart(JSON.parse(localStorage.getItem("transactions")) || []);
 });
@@ -80,12 +81,15 @@ document
     const description = document.getElementById("description").value;
     const amount = document.getElementById("amount").value;
     const category = document.getElementById("category").value;
+    const year = document.getElementById("year").value;
+    const month = document.getElementById("month").value;
+    const day = document.getElementById("day").value;
 
-    if (description && amount) {
+    if (description && amount && category && year && month && day) {
       const transaction = {
         description,
         amount: parseFloat(amount),
-        date: new Date().toLocaleString(),
+        date: new Date(year, month - 1, day).toLocaleString(),
         category,
       };
       addTransaction(transaction);
@@ -96,6 +100,53 @@ document
       alert("Please fill in all fields");
     }
   });
+
+function initializeDateSelectors() {
+  const today = new Date();
+  const yearSelector = document.getElementById("year");
+  const monthSelector = document.getElementById("month");
+  const daySelector = document.getElementById("day");
+
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1;
+  const currentDay = today.getDate();
+
+  // Populate year selector
+  yearSelector.innerHTML = "";
+  for (let i = currentYear - 10; i <= currentYear + 10; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.text = i;
+    if (i === currentYear) {
+      option.selected = true;
+    }
+    yearSelector.appendChild(option);
+  }
+
+  // Populate month selector
+  monthSelector.innerHTML = "";
+  for (let i = 1; i <= 12; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.text = i;
+    if (i === currentMonth) {
+      option.selected = true;
+    }
+    monthSelector.appendChild(option);
+  }
+
+  // Populate day selector
+  daySelector.innerHTML = "";
+  for (let i = 1; i <= 31; i++) {
+    const option = document.createElement("option");
+    option.value = i;
+    option.text = i;
+    if (i === currentDay) {
+      option.selected = true;
+    }
+    daySelector.appendChild(option);
+  }
+}
 
 function addTransaction(transaction) {
   const transactionList = document.getElementById("transaction-list");
