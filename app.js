@@ -16,6 +16,7 @@ function generateChart(transactions) {
     "Education",
     "Transportation",
     "Entertainment",
+    "Undefined",
   ];
   const categoryAmounts = categories.map((category) =>
     transactions
@@ -68,6 +69,34 @@ function generateChart(transactions) {
   });
 }
 
+function categorizeTransaction(description) {
+  const categories = {
+    Savings: ["Månadssparande"],
+    "Income (Insurance agency)": ["Insättning från annan bank FKASSA"],
+    "Income (Rent)": ["Bankgiro insättning 427096650421"],
+    "Income (Tax refund)": ["Återbetalning skatt SK8511210232"],
+    Housing: ["rent", "mortgage", "utilities"],
+    Electronics: ["electronics", "gadget", "device"],
+    "Insurance and fees": ["insurance", "fee"],
+    Health: ["health", "doctor", "medicine", "hospital"],
+    "Food and groceries": ["food", "groceries", "supermarket"],
+    "Personal care": ["personal care", "salon", "spa"],
+    Education: ["education", "school", "tuition"],
+    Transportation: ["transportation", "bus", "train", "fuel"],
+    Entertainment: ["entertainment", "movie", "concert"],
+  };
+  for (let category in categories) {
+    if (
+      categories[category].some((keyword) =>
+        description.toLowerCase().includes(keyword)
+      )
+    ) {
+      return category;
+    }
+  }
+  return "Undefined";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   initializeDateSelectors();
   loadTransactions();
@@ -80,12 +109,12 @@ document
     e.preventDefault();
     const description = document.getElementById("description").value;
     const amount = document.getElementById("amount").value;
-    const category = document.getElementById("category").value;
     const year = document.getElementById("year").value;
     const month = document.getElementById("month").value;
     const day = document.getElementById("day").value;
 
-    if (description && amount && category && year && month && day) {
+    if (description && amount && year && month && day) {
+      const category = categorizeTransaction(description);
       const transaction = {
         description,
         amount: parseFloat(amount),
