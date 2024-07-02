@@ -28,12 +28,16 @@
 
         <button type="submit">Add Transaction</button>
       </form>
-
+      <textarea
+        id="raw-data"
+        placeholder="Paste your account history here"
+      ></textarea>
+      <button id="process-data">Process Data</button>
       <input type="text" id="search" placeholder="Search transactions" />
       <ul id="transaction-list"></ul>
       <canvas id="myChart" width="400" height="400"></canvas>
     </div>
-    <script src="app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
   </body>
 </html>

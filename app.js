@@ -130,6 +130,27 @@ document
     }
   });
 
+document.getElementById("process-data").addEventListener("click", function () {
+  const rawData = document.getElementById("raw-data").value;
+  const lines = rawData.split("\n");
+  lines.forEach((line) => {
+    const [date, description, amount, balance] = line.split("\t");
+    if (date && description && amount && balance) {
+      const category = categorizeTransaction(description);
+      const transaction = {
+        description,
+        amount: parseFloat(amount.replace(",", ".")),
+        date: new Date(date).toLocaleString(),
+        category,
+      };
+      addTransaction(transaction);
+      saveTransaction(transaction);
+    }
+  });
+  generateChart(JSON.parse(localStorage.getItem("transactions")) || []);
+  document.getElementById("raw-data").value = "";
+});
+
 function initializeDateSelectors() {
   const today = new Date();
   const yearSelector = document.getElementById("year");
