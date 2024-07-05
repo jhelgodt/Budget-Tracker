@@ -36,6 +36,37 @@
       <input type="text" id="search" placeholder="Search transactions" />
       <ul id="transaction-list"></ul>
       <canvas id="myChart" width="400" height="400"></canvas>
+
+      <h2>Current Categories</h2>
+      <ul id="category-list"></ul>
+
+      <h2>Manage Categories</h2>
+      <form id="category-form">
+        <label for="category-name">Category:</label>
+        <input
+          type="text"
+          id="category-name"
+          placeholder="Category Name"
+          required
+        />
+
+        <label for="subcategory-name">Subcategory:</label>
+        <input
+          type="text"
+          id="subcategory-name"
+          placeholder="Subcategory Name"
+        />
+
+        <label for="keywords">Keywords</label>
+        <input
+          type="text"
+          id="keywords"
+          placeholder="Comma-separated keywords"
+          required
+        />
+
+        <button type="submit">Add Category</button>
+      </form>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>

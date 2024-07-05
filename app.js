@@ -100,8 +100,91 @@ function categorizeTransaction(description) {
 document.addEventListener("DOMContentLoaded", function () {
   initializeDateSelectors();
   loadTransactions();
+  loadCategories();
   generateChart(JSON.parse(localStorage.getItem("transactions")) || []);
 });
+
+document
+  .getElementById("category-form")
+  .addEventListener("submit", function (e) {
+    e.preventDefault();
+    const categoryName = document.getElementById("category-name").value.trim();
+    const subcategoryName = document
+      .getElementById("subcategory-name")
+      .value.trim();
+    const keywords = document
+      .getElementById("keywords")
+      .value.trim()
+      .split(",");
+
+    if (categoryName && keywords.length > 0) {
+      const category = {
+        categoryName,
+        subcategoryName: subcategoryName || null,
+        keywords: keywords.map((keyword) => keyword.trim().toLowerCase()),
+      };
+      saveCategory(category);
+      addCategoryToUI(category);
+      document.getElementById("category-form").reset();
+    } else {
+      alert("Please fill in all required fields");
+    }
+  });
+
+function saveCategory(category) {
+  let categories = JSON.parse(localStorage.getItem("categories")) || [];
+  categories.push(category);
+  localStorage.setItem("categories", JSON.stringify(categories));
+}
+
+function loadCategories() {
+  const categories = JSON.parse(localStorage.getItem("categories")) || [];
+  categories.forEach((category) => addCategoryToUI(category));
+}
+
+function addCategoryToUI(category) {
+  const categoryList = document.getElementById("category-list");
+  const li = document.createElement("li");
+  li.textContent = `${category.categoryName} - ${
+    category.subcategoryName || ""
+  }: ${category.keywords.join(",")}`;
+
+  const removeBtn = document.createElement("button");
+  removeBtn.textContent = "Remove";
+  removeBtn.onclick = () => {
+    removeCategory(category, li);
+  };
+  li.appendChild(removeBtn);
+
+  categoryList.appendChild(li);
+}
+
+function removeCategory(category, li) {
+  let categories = JSON.parse(localStorage.getItem("categories")) || [];
+  const updatedCategories = categories.filter(
+    (c) =>
+      c.categoryName !== category.categoryName ||
+      c.subcategoryName !== category.subcategoryName
+  );
+  localStorage.setItem("categories", JSON.stringify(updatedCategories));
+  li.remove();
+}
+
+function categorizeTransaction(description) {
+  const categories = JSON.parse(localStorage.getItem("categories")) || [];
+  for (let category of categories) {
+    if (
+      category.keywords.some((keyword) =>
+        description.toLowerCase().includes(keyword)
+      )
+    ) {
+      return category.subcategoryName
+        ? `${category.categoryName} - ${category.subcategoryName}`
+        : category.categoryName;
+    }
+  }
+  return "Undefined";
+}
 
 document
   .getElementById("transaction-form")
