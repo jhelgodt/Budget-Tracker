@@ -69,34 +69,6 @@ function generateChart(transactions) {
   });
 }
 
-function categorizeTransaction(description) {
-  const categories = {
-    Savings: ["Månadssparande"],
-    "Income (Insurance agency)": ["Insättning från annan bank FKASSA"],
-    "Income (Rent)": ["Bankgiro insättning 427096650421"],
-    "Income (Tax refund)": ["Återbetalning skatt SK8511210232"],
-    Housing: ["rent", "mortgage", "utilities"],
-    Electronics: ["electronics", "gadget", "device"],
-    "Insurance and fees": ["insurance", "fee"],
-    Health: ["health", "doctor", "medicine", "hospital"],
-    "Food and groceries": ["food", "groceries", "supermarket"],
-    "Personal care": ["personal care", "salon", "spa"],
-    Education: ["education", "school", "tuition"],
-    Transportation: ["transportation", "bus", "train", "fuel"],
-    Entertainment: ["entertainment", "movie", "concert"],
-  };
-  for (let category in categories) {
-    if (
-      categories[category].some((keyword) =>
-        description.toLowerCase().includes(keyword)
-      )
-    ) {
-      return category;
-    }
-  }
-  return "Undefined";
-}
-
 document.addEventListener("DOMContentLoaded", function () {
   initializeDateSelectors();
   loadTransactions();
@@ -109,18 +81,18 @@ document
   .addEventListener("submit", function (e) {
     e.preventDefault();
     const categoryName = document.getElementById("category-name").value.trim();
-    const subcategoryName = document
-      .getElementById("subcategory-name")
-      .value.trim();
     const keywords = document
       .getElementById("keywords")
       .value.trim()
       .split(",");
+    const categoryType = document.querySelector(
+      'input[name="category-type"]:checked'
+    ).value;
 
     if (categoryName && keywords.length > 0) {
       const category = {
         categoryName,
-        subcategoryName: subcategoryName || null,
+        categoryType,
         keywords: keywords.map((keyword) => keyword.trim().toLowerCase()),
       };
       saveCategory(category);
@@ -132,22 +104,41 @@ document
   });
 
 function saveCategory(category) {
-  let categories = JSON.parse(localStorage.getItem("categories")) || [];
-  categories.push(category);
+  let categories = JSON.parse(localStorage.getItem("categories")) || {
+    income: [],
+    expense: [],
+  };
+  if (category.categoryType === "income") {
+    categories.income.push(category);
+  } else if (category.categoryType === "expense") {
+    categories.expense.push(category);
+  }
   localStorage.setItem("categories", JSON.stringify(categories));
 }
 
 function loadCategories() {
-  const categories = JSON.parse(localStorage.getItem("categories")) || [];
-  categories.forEach((category) => addCategoryToUI(category));
+  const categories = JSON.parse(localStorage.getItem("categories")) || {
+    income: [],
+    expense: [],
+  };
+
+  categories.income.forEach((category) => addCategoryToUI(category));
+  categories.expense.forEach((category) => addCategoryToUI(category));
 }
 
 function addCategoryToUI(category) {
   const categoryList = document.getElementById("category-list");
   const li = document.createElement("li");
-  li.textContent = `${category.categoryName} - ${
-    category.subcategoryName || ""
-  }: ${category.keywords.join(",")}`;
+
+  if (category.categoryType === "income") {
+    li.textContent = `Income - ${
+      category.categoryName
+    }: ${category.keywords.join(",")}`;
+  } else if (category.categoryType === "expense") {
+    li.textContent = `Expense - ${
+      category.categoryName
+    }: ${category.keywords.join(",")}`;
+  }
 
   const removeBtn = document.createElement("button");
   removeBtn.textContent = "Remove";
@@ -160,27 +151,37 @@ function addCategoryToUI(category) {
 }
 
 function removeCategory(category, li) {
-  let categories = JSON.parse(localStorage.getItem("categories")) || [];
-  const updatedCategories = categories.filter(
-    (c) =>
-      c.categoryName !== category.categoryName ||
-      c.subcategoryName !== category.subcategoryName
-  );
+  let categories = JSON.parse(localStorage.getItem("categories")) || {
+    income: [],
+    expense: [],
+  };
+
+  const updatedCategories = {
+    income: categories.income.filter(
+      (c) => c.categoryName !== category.categoryName
+    ),
+    expense: categories.expense.filter(
+      (c) => c.categoryName !== category.categoryName
+    ),
+  };
   localStorage.setItem("categories", JSON.stringify(updatedCategories));
   li.remove();
 }
 
 function categorizeTransaction(description) {
-  const categories = JSON.parse(localStorage.getItem("categories")) || [];
-  for (let category of categories) {
-    if (
-      category.keywords.some((keyword) =>
-        description.toLowerCase().includes(keyword)
-      )
-    ) {
-      return category.subcategoryName
-        ? `${category.categoryName} - ${category.subcategoryName}`
-        : category.categoryName;
+  const categories = JSON.parse(localStorage.getItem("categories")) || {
+    income: [],
+    expense: [],
+  };
+  for (let categoryType in categories) {
+    for (let category of categories[categoryType]) {
+      if (
+        category.keywords.some((keyword) =>
+          description.toLowerCase().includes(keyword)
+        )
+      ) {
+        return category.categoryName;
+      }
     }
   }
   return "Undefined";
