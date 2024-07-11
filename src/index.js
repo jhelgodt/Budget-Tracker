@@ -1,3 +1,5 @@
+//index.js
+
 // Import necessary functions and objects
 import { displayTransactions, updateChart } from "./modules/transactions.js";
 

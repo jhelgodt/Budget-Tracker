@@ -28,9 +28,12 @@ export function displayTransactions() {
   });
 }
 
+// Variable to store the chart instance
+let transactionChart;
+
 // Function to update the chart
 export function updateChart() {
-  const ctx = document.getElementById("expenseChart").getContext("2d");
+  const ctx = document.getElementById("transactionChart").getContext("2d");
   const showIncome = document.getElementById("showIncome").checked;
   const showExpenses = document.getElementById("showExpenses").checked;
 
@@ -46,26 +49,33 @@ export function updateChart() {
     return acc;
   }, {});
 
-  new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: Object.keys(transactionData),
-      datasets: [
-        {
-          label: "Transactions by Category",
-          data: Object.values(transactionData),
-          backgroundColor: "rgba(255, 99, 132, 0.2)",
-          borderColor: "rgba(255, 99, 132, 1)",
-          borderWidth: 1,
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
+  const data = {
+    labels: Object.keys(transactionData),
+    datasets: [
+      {
+        label: "Transactions by Category",
+        data: Object.values(transactionData),
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgba(255, 99, 132, 1)",
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  if (transactionChart) {
+    transactionChart.data = data;
+    transactionChart.update();
+  } else {
+    transactionChart = new Chart(ctx, {
+      type: "bar",
+      data,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
         },
       },
-    },
-  });
+    });
+  }
 }
