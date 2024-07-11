@@ -9,6 +9,10 @@
   <body>
     <div id="app">
       <h1>Budget Tracker</h1>
+      <div>
+        <input type="checkbox" id="showIncome" checked /> Show Income
+        <input type="checkbox" id="showExpenses" checked /> Show Expenses
+      </div>
       <table id="transactionTable">
         <thead>
           <tr>
@@ -19,10 +23,10 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Transactiont will be added here dynamically -->
+          <!-- Transactions will be added here dynamically -->
         </tbody>
       </table>
-      <canvas id="expenseChart" width="400" heigt="400"></canvas>
+      <canvas id="expenseChart" width="400" height="400"></canvas>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
