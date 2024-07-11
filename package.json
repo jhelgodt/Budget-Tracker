@@ -1,0 +1,22 @@
+{
+  "name": "budget-tracker",
+  "version": "1.0.0",
+  "description": "This is a simple Budget Management Application built with HTML, CSS, and JavaScript. The application allows users to add income and expense transactions, categorize them, and view their financial history dynamically.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.0",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "chart.js": "^4.4.3"
+  }
+}
