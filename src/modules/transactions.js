@@ -8,8 +8,25 @@ const transactions = [
   { type: "income", category: "Salary", amount: 5000, date: "2024-07-01" },
   { type: "expense", category: "Groceries", amount: 150, date: "2024-07-02" },
   { type: "expense", category: "Utilities", amount: 200, date: "2024-07-03" },
-  // Add more transactions as needed
+  {
+    type: "expense",
+    category: "Entertainment",
+    amount: 100,
+    date: "2024-07-04",
+  },
+  { type: "income", category: "Freelance", amount: 1200, date: "2024-07-05" },
+  { type: "expense", category: "Rent", amount: 1200, date: "2024-07-06" },
+  { type: "expense", category: "Travel", amount: 300, date: "2024-07-07" },
+  { type: "expense", category: "Health", amount: 100, date: "2024-07-08" },
+  { type: "income", category: "Investment", amount: 400, date: "2024-07-09" },
+  {
+    type: "expense",
+    category: "Miscellaneous",
+    amount: 50,
+    date: "2024-07-10",
+  },
 ];
+// Add more transactions as needed
 
 // Function to display transactions in the table
 export function displayTransactions() {
@@ -37,11 +54,30 @@ export function updateChart() {
   const showIncome = document.getElementById("showIncome").checked;
   const showExpenses = document.getElementById("showExpenses").checked;
 
-  const filteredTransactions = transactions.filter(
-    (transaction) =>
-      (showIncome && transaction.type === "income") ||
-      (showExpenses && transaction.type === "expense")
-  );
+  const selectedYears = Array.from(
+    document.querySelectorAll(".filterYear:checked")
+  ).map((cb) => cb.value);
+  const selectedMonths = Array.from(
+    document.querySelectorAll(".filterMonth:checked")
+  ).map((cb) => cb.value);
+
+  const filteredTransactions = transactions.filter((transaction) => {
+    const transactionDate = new Date(transaction.date);
+    const yearMatch =
+      selectedYears.length === 0 ||
+      selectedYears.includes(transactionDate.getFullYear().toString());
+    const monthMatch =
+      selectedMonths.length === 0 ||
+      selectedMonths.includes(
+        (transactionDate.getMonth() + 1).toString().padStart(2, "0")
+      );
+    return (
+      ((showIncome && transaction.type === "income") ||
+        (showExpenses && transaction.type === "expense")) &&
+      yearMatch &&
+      monthMatch
+    );
+  });
 
   const transactionData = filteredTransactions.reduce((acc, transaction) => {
     acc[transaction.category] =
