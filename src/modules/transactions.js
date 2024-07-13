@@ -60,6 +60,9 @@ export function updateChart() {
   const selectedMonths = Array.from(
     document.querySelectorAll(".filterMonth:checked")
   ).map((cb) => cb.value);
+  const selectedCategories = Array.from(
+    document.querySelectorAll(".filterCategory:checked")
+  ).map((cb) => cb.value);
 
   const filteredTransactions = transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.date);
@@ -71,11 +74,15 @@ export function updateChart() {
       selectedMonths.includes(
         (transactionDate.getMonth() + 1).toString().padStart(2, "0")
       );
+    const categoryMatch =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(transaction.category);
     return (
       ((showIncome && transaction.type === "income") ||
         (showExpenses && transaction.type === "expense")) &&
       yearMatch &&
-      monthMatch
+      monthMatch &&
+      categoryMatch
     );
   });
 

@@ -12,6 +12,9 @@ document
 document
   .querySelectorAll(".filterMonth")
   .forEach((cb) => cb.addEventListener("change", updateChart));
+document
+  .querySelectorAll(".filterCategory")
+  .forEach((cb) => cb.addEventListener("change", updateChart));
 
 // When the document is fully loaded, render the transactions and the chart
 document.addEventListener("DOMContentLoaded", () => {
