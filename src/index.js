@@ -20,8 +20,14 @@ function parseTransactions(text) {
     if (parts.length >= 4) {
       const date = parts[0].trim();
       const description = parts[1].trim(); // Not used now
-      const amount = parseFloat(parts[2].replace(/[^\d.-]/g, "")); // Extract numeric amount
-      const accountBalance = parseFloat(parts[3].replace(/[^\d.-]/g, "")); // Not used for now/
+      // Replace all non-digit characters except for minus and comma, then replace comma with a period
+      const amountString = parts[2].replace(/[^\d,-]/g, "").replace(",", ".");
+      const amount = parseFloat(amountString);
+
+      const accountBalanceString = parts[3]
+        .replace(/[^\d,-]/g, "")
+        .replace(",", ".");
+      const accountBalance = parseFloat(accountBalanceString); // Not used for now
 
       if (!isNaN(amount)) {
         parsedTransactions.push({
