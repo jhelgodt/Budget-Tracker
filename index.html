@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Budget Tracker</title>
+    <link rel="stylesheet" type="text/css" href="../styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <h1>Budget Tracker</h1>
+      <div class="filters">
+        <div class="filter-group">
+          <label
+            ><input type="checkbox" id="showIncome" checked /> Show
+            Income</label
+          >
+          <label
+            ><input type="checkbox" id="showExpenses" checked /> Show
+            Expenses</label
+          >
+        </div>
+        <div class="filter-group">
+          <h3>Filter by Year</h3>
+          <label
+            ><input type="checkbox" class="filterYear" value="2024" checked />
+            2024</label
+          >
+          <label
+            ><input type="checkbox" class="filterYear" value="2023" checked />
+            2023</label
+          >
+          <label
+            ><input type="checkbox" class="filterYear" value="2022" />
+            2022</label
+          >
+          <label
+            ><input type="checkbox" class="filterYear" value="2021" />
+            2021</label
+          >
+        </div>
+        <div class="filter-group">
+          <h3>Filter by Month</h3>
+          <label
+            ><input type="checkbox" class="filterMonth" value="01" checked />
+            January</label
+          >
+          <label
+            ><input type="checkbox" class="filterMonth" value="02" checked />
+            February</label
+          >
+          <label
+            ><input type="checkbox" class="filterMonth" value="03" checked />
+            March</label
+          >
+          <label
+            ><input type="checkbox" class="filterMonth" value="04" checked />
+            April</label
+          >
+          <label
+            ><input type="checkbox" class="filterMonth" value="05" checked />
+            May</label
+          >
+          <label
+            ><input type="checkbox" class="filterMonth" value="06" checked />
+            June</label
+          >
+          <label
+            ><input type="checkbox" class="filterMonth" value="07" checked />
+            July</label
+          >
+          <label
+            ><input type="checkbox" class="filterMonth" value="08" />
+            August</label
+          >
+          <label
+            ><input type="checkbox" class="filterMonth" value="09" />
+            September</label
+          >
+          <label
+            ><input type="checkbox" class="filterMonth" value="10" />
+            October</label
+          >
+          <label
+            ><input type="checkbox" class="filterMonth" value="11" />
+            November</label
+          >
+          <label
+            ><input type="checkbox" class="filterMonth" value="12" />
+            December</label
+          >
+        </div>
+        <div class="filter-group">
+          <h3>Filter by Category</h3>
+          <label
+            ><input
+              type="checkbox"
+              class="filterCategory"
+              value="Salary"
+              checked
+            />
+            Salary</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              class="filterCategory"
+              value="Groceries"
+              checked
+            />
+            Groceries</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              class="filterCategory"
+              value="Utilities"
+              checked
+            />
+            Utilities</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              class="filterCategory"
+              value="Entertainment"
+              checked
+            />
+            Entertainment</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              class="filterCategory"
+              value="Freelance"
+              checked
+            />
+            Freelance</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              class="filterCategory"
+              value="Rent"
+              checked
+            />
+            Rent</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              class="filterCategory"
+              value="Travel"
+              checked
+            />
+            Travel</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              class="filterCategory"
+              value="Health"
+              checked
+            />
+            Health</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              class="filterCategory"
+              value="Investment"
+              checked
+            />
+            Investment</label
+          >
+          <label
+            ><input
+              type="checkbox"
+              class="filterCategory"
+              value="Miscellaneous"
+              checked
+            />
+            Miscellaneous</label
+          >
+        </div>
+      </div>
+      <canvas id="transactionChart" width="800" height="600"></canvas>
+      <textarea
+        id="transactionInput"
+        placeholder="Enter transactions..."
+        spellcheck="false"
+      ></textarea>
+      <button id="addTransactionsBtn">Add Transactions</button>
+
+      <table id="transactionTable">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Transactions will be added here dynamically -->
+        </tbody>
+      </table>
+    </div>
+    <script src="../dist/bundle.js"></script>
+  </body>
+</html>

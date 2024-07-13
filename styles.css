@@ -62,3 +62,12 @@ canvas {
   display: block;
   margin: 0 auto;
 }
+#transactionInput {
+  width: 100%;
+  min-height: 200px;
+  resize: vertical;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}

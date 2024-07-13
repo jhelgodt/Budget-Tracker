@@ -4,7 +4,7 @@
 import Chart from "chart.js/auto";
 
 // Define an array of transactions
-const transactions = [
+export const transactions = [
   { type: "income", category: "Salary", amount: 5000, date: "2024-07-01" },
   { type: "expense", category: "Groceries", amount: 150, date: "2024-07-02" },
   { type: "expense", category: "Utilities", amount: 200, date: "2024-07-03" },
