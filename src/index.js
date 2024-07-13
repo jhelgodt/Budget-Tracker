@@ -29,8 +29,12 @@ function parseTransactions(text) {
         .replace(",", ".");
       const accountBalance = parseFloat(accountBalanceString); // Not used for now
 
+      // Determine transaction type based on amount
+      const type = amount >= 0 ? "income" : "expense";
+
       if (!isNaN(amount)) {
         parsedTransactions.push({
+          type: type,
           category: "Undefined",
           amount: amount,
           date: date,
