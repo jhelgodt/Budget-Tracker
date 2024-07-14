@@ -7,32 +7,36 @@ import {
   transactions,
 } from "./modules/transactions.js";
 
-// Define the categories
-const categories = [
-  "Salary",
-  "The Swedish Social Insurance Agency",
-  "The Swedish Tax Agency",
-  "Savings",
-  "Groceries",
-  "Utilities",
-  "Entertainment",
-  "Rent and Household",
-  "Clothes",
-  "Electronics and Gadgets",
-  "Sports",
-  "Personal Care",
-  "Transportation",
-  "Health",
-  "Food and Beverage",
-  "Miscellaneous",
-  "Undefined",
-];
+// Define the categories with their corresponding keywords
+const categoryKeywords = {
+  Salary: ["salary", "wage", "income"],
+  "The Swedish Social Insurance Agency": [
+    "försäkringskassan",
+    "social insurance",
+  ],
+  "The Swedish Tax Agency": ["skatteverket", "tax agency"],
+  Savings: ["saving", "deposit"],
+  Groceries: ["grocery", "supermarket", "food"],
+  Utilities: ["utility", "electricity", "water", "internet"],
+  Entertainment: ["entertainment", "movie", "music", "game"],
+  "Rent and Household": ["rent", "household", "mortgage"],
+  Clothes: ["clothes", "apparel", "fashion"],
+  "Electronics and Gadgets": ["electronics", "gadget", "phone", "laptop"],
+  Sports: ["sport", "gym", "fitness"],
+  "Personal Care": ["shampoo", "soap", "toothpaste"],
+  Transportation: ["transport", "bus", "train", "fuel"],
+  Health: ["health", "medicine", "doctor", "hospital"],
+  "Food and Beverage": ["restaurant", "cafe", "bar"],
+  Miscellaneous: ["miscellaneous", "other"],
+  Undefined: [],
+};
 
 // Function to determine the category based on description
 
 function getCategoryFromDescription(description) {
-  for (const category of categories) {
-    if (description.toLowerCase().includes(category.toLowerCase())) {
+  description = description.toLowerCase();
+  for (const [category, keywords] of Object.entries(categoryKeywords)) {
+    if (keywords.some((keyword) => description.includes(keyword))) {
       return category;
     }
   }
