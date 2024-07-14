@@ -7,6 +7,38 @@ import {
   transactions,
 } from "./modules/transactions.js";
 
+// Define the categories
+const categories = [
+  "Salary",
+  "The Swedish Social Insurance Agency",
+  "The Swedish Tax Agency",
+  "Savings",
+  "Groceries",
+  "Utilities",
+  "Entertainment",
+  "Rent and Household",
+  "Clothes",
+  "Electronics and Gadgets",
+  "Sports",
+  "Personal Care",
+  "Transportation",
+  "Health",
+  "Food and Beverage",
+  "Miscellaneous",
+  "Undefined",
+];
+
+// Function to determine the category based on description
+
+function getCategoryFromDescription(description) {
+  for (const category of categories) {
+    if (description.toLowerCase().includes(category.toLowerCase())) {
+      return category;
+    }
+  }
+  return "Undefined";
+}
+
 // Function to parse transactions from text input
 function parseTransactions(text) {
   const parsedTransactions = [];
@@ -19,7 +51,7 @@ function parseTransactions(text) {
     const parts = trimmedLine.split("\t");
     if (parts.length >= 4) {
       const date = parts[0].trim();
-      const description = parts[1].trim(); // Not used now
+      const description = parts[1].trim();
       // Replace all non-digit characters except for minus and comma, then replace comma with a period
       const amountString = parts[2].replace(/[^\d,-]/g, "").replace(",", ".");
       const amount = parseFloat(amountString);
@@ -33,11 +65,13 @@ function parseTransactions(text) {
       const type = amount >= 0 ? "income" : "expense";
 
       if (!isNaN(amount)) {
+        const category = getCategoryFromDescription(description);
         parsedTransactions.push({
+          category: category,
           type: type,
-          category: "Undefined",
           amount: amount,
           date: date,
+          description: description,
         });
       }
     }
