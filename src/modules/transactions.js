@@ -37,6 +37,7 @@ export function displayTransactions() {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${transaction.type}</td>
+      <td>${transaction.description}</td>
       <td>${transaction.category}</td>
       <td>${transaction.amount}</td>
       <td>${new Date(transaction.date).toLocaleDateString()}</td>
