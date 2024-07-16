@@ -4,28 +4,7 @@
 import Chart from "chart.js/auto";
 
 // Define an array of transactions
-export const transactions = [
-  { type: "income", category: "Salary", amount: 5000, date: "2024-07-01" },
-  { type: "expense", category: "Groceries", amount: 150, date: "2024-07-02" },
-  { type: "expense", category: "Utilities", amount: 200, date: "2024-07-03" },
-  {
-    type: "expense",
-    category: "Entertainment",
-    amount: 100,
-    date: "2024-07-04",
-  },
-  { type: "income", category: "Freelance", amount: 1200, date: "2024-07-05" },
-  { type: "expense", category: "Rent", amount: 1200, date: "2024-07-06" },
-  { type: "expense", category: "Travel", amount: 300, date: "2024-07-07" },
-  { type: "expense", category: "Health", amount: 100, date: "2024-07-08" },
-  { type: "income", category: "Investment", amount: 400, date: "2024-07-09" },
-  {
-    type: "expense",
-    category: "Miscellaneous",
-    amount: 50,
-    date: "2024-07-10",
-  },
-];
+export const transactions = [];
 // Add more transactions as needed
 
 // Function to display transactions in the table
