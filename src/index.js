@@ -25,6 +25,7 @@ const categoryKeywords = {
     "fondab",
     "överföring 9159 7613489",
     "överf. j. helgodt",
+    "avanza",
   ],
   Groceries: [
     "coop",

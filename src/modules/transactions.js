@@ -97,12 +97,16 @@ export function updateChart() {
 
   const groupedData = groupByQuarter(filteredTransactions);
 
+  // Ensure the order of years is maintained
+  const orderedYears = ["2021", "2022", "2023", "2024"];
   const labels = [];
   const datasets = [];
 
-  selectedYears.forEach((year) => {
-    for (let q = 1; q <= 4; q++) {
-      labels.push(`${year} Q${q}`);
+  orderedYears.forEach((year) => {
+    if (selectedYears.includes(year)) {
+      for (let q = 1; q <= 4; q++) {
+        labels.push(`${year} Q${q}`);
+      }
     }
   });
 
@@ -112,13 +116,15 @@ export function updateChart() {
   });
 
   Object.keys(groupedData).forEach((year) => {
-    Object.keys(groupedData[year]).forEach((quarter) => {
-      const label = `${year} Q${quarter}`;
-      const index = labels.indexOf(label);
-      Object.keys(groupedData[year][quarter]).forEach((category) => {
-        categoryData[category][index] = groupedData[year][quarter][category];
+    if (orderedYears.includes(year)) {
+      Object.keys(groupedData[year]).forEach((quarter) => {
+        const label = `${year} Q${quarter}`;
+        const index = labels.indexOf(label);
+        Object.keys(groupedData[year][quarter]).forEach((category) => {
+          categoryData[category][index] = groupedData[year][quarter][category];
+        });
       });
-    });
+    }
   });
 
   selectedCategories.forEach((category) => {
