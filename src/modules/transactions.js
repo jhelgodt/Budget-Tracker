@@ -25,6 +25,35 @@ export function displayTransactions() {
   });
 }
 
+function getQuarter(month) {
+  return Math.floor((month - 1) / 3) + 1;
+}
+
+function groupByQuarter(transactions) {
+  const groupedData = {};
+
+  transactions.forEach((transaction) => {
+    const date = new Date(transaction.date);
+    const year = date.getFullYear();
+    const quarter = getQuarter(date.getMonth() + 1);
+
+    if (!groupedData[year]) {
+      groupedData[year] = {};
+    }
+
+    if (!groupedData[year][quarter]) {
+      groupedData[year][quarter] = {};
+    }
+    if (!groupedData[year][quarter][transaction.category]) {
+      groupedData[year][quarter][transaction.category] = 0;
+    }
+
+    groupedData[year][quarter][transaction.category] += transaction.amount;
+  });
+
+  return groupedData;
+}
+
 // Variable to store the chart instance
 let transactionChart;
 
@@ -66,23 +95,45 @@ export function updateChart() {
     );
   });
 
-  const transactionData = filteredTransactions.reduce((acc, transaction) => {
-    acc[transaction.category] =
-      (acc[transaction.category] || 0) + transaction.amount;
-    return acc;
-  }, {});
+  const groupedData = groupByQuarter(filteredTransactions);
+
+  const labels = [];
+  const datasets = [];
+
+  selectedYears.forEach((year) => {
+    for (let q = 1; q <= 4; q++) {
+      labels.push(`${year} Q${q}`);
+    }
+  });
+
+  const categoryData = {};
+  selectedCategories.forEach((category) => {
+    categoryData[category] = new Array(labels.length).fill(0);
+  });
+
+  Object.keys(groupedData).forEach((year) => {
+    Object.keys(groupedData[year]).forEach((quarter) => {
+      const label = `${year} Q${quarter}`;
+      const index = labels.indexOf(label);
+      Object.keys(groupedData[year][quarter]).forEach((category) => {
+        categoryData[category][index] = groupedData[year][quarter][category];
+      });
+    });
+  });
+
+  selectedCategories.forEach((category) => {
+    datasets.push({
+      label: category,
+      data: categoryData[category],
+      fill: false,
+      borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+      tension: 0.1,
+    });
+  });
 
   const data = {
-    labels: Object.keys(transactionData),
-    datasets: [
-      {
-        label: "Transactions by Category",
-        data: Object.values(transactionData),
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-      },
-    ],
+    labels: labels,
+    datasets: datasets,
   };
 
   if (transactionChart) {
@@ -90,7 +141,7 @@ export function updateChart() {
     transactionChart.update();
   } else {
     transactionChart = new Chart(ctx, {
-      type: "bar",
+      type: "line",
       data,
       options: {
         scales: {
