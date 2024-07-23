@@ -158,4 +158,63 @@ export function updateChart() {
       },
     });
   }
+  // Call displayCategoryTotals to update the category totals table
+  displayCategoryTotals();
+}
+
+// Function to calculate and display category totals
+export function displayCategoryTotals() {
+  const tableBody = document.querySelector("#categoryTotalsTable tbody");
+  tableBody.innerHTML = ""; // Clear existing totals
+
+  const showIncome = document.getElementById("showIncome").checked;
+  const showExpenses = document.getElementById("showExpenses").checked;
+
+  const selectedYears = Array.from(
+    document.querySelectorAll(".filterYear:checked")
+  ).map((cb) => cb.value);
+  const selectedMonths = Array.from(
+    document.querySelectorAll(".filterMonth:checked")
+  ).map((cb) => cb.value);
+  const selectedCategories = Array.from(
+    document.querySelectorAll(".filterCategory:checked")
+  ).map((cb) => cb.value);
+
+  const filteredTransactions = transactions.filter((transaction) => {
+    const transactionDate = new Date(transaction.date);
+    const yearMatch =
+      selectedYears.length === 0 ||
+      selectedYears.includes(transactionDate.getFullYear().toString());
+    const monthMatch =
+      selectedMonths.length === 0 ||
+      selectedMonths.includes(
+        (transactionDate.getMonth() + 1).toString().padStart(2, "0")
+      );
+    const categoryMatch =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(transaction.category);
+    return (
+      ((showIncome && transaction.type === "income") ||
+        (showExpenses && transaction.type === "expense")) &&
+      yearMatch &&
+      monthMatch &&
+      categoryMatch
+    );
+  });
+  // Calculate totals for each category
+  const categoryTotals = {};
+  filteredTransactions.forEach((transaction) => {
+    if (!categoryTotals[transaction.category]) {
+      categoryTotals[transaction.category] = 0;
+    }
+    categoryTotals[transaction.category] += transaction.amount;
+  });
+
+  // Display totals in the table
+  Object.keys(categoryTotals).forEach((category) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `<td>${category}</td>
+    <td>${categoryTotals[category].toFixed(2)}</td>`;
+    tableBody.appendChild(row);
+  });
 }

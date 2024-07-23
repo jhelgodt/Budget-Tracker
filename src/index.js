@@ -5,6 +5,7 @@ import {
   displayTransactions,
   updateChart,
   transactions,
+  displayCategoryTotals,
 } from "./modules/transactions.js";
 
 // Define the categories with their corresponding keywords
@@ -359,23 +360,40 @@ document.getElementById("addTransactionsBtn").addEventListener("click", () => {
   // Redisplay transactions and update chart
   displayTransactions();
   updateChart();
+  displayCategoryTotals();
 });
 
 // Event listeners for checkboxes
-document.getElementById("showIncome").addEventListener("change", updateChart);
-document.getElementById("showExpenses").addEventListener("change", updateChart);
-document
-  .querySelectorAll(".filterYear")
-  .forEach((cb) => cb.addEventListener("change", updateChart));
-document
-  .querySelectorAll(".filterMonth")
-  .forEach((cb) => cb.addEventListener("change", updateChart));
-document
-  .querySelectorAll(".filterCategory")
-  .forEach((cb) => cb.addEventListener("change", updateChart));
+document.getElementById("showIncome").addEventListener("change", () => {
+  updateChart();
+  displayCategoryTotals(); // Add this line
+});
+document.getElementById("showExpenses").addEventListener("change", () => {
+  updateChart();
+  displayCategoryTotals(); // Add this line
+});
+document.querySelectorAll(".filterYear").forEach((cb) =>
+  cb.addEventListener("change", () => {
+    updateChart();
+    displayCategoryTotals(); // Add this line
+  })
+);
+document.querySelectorAll(".filterMonth").forEach((cb) =>
+  cb.addEventListener("change", () => {
+    updateChart();
+    displayCategoryTotals(); // Add this line
+  })
+);
+document.querySelectorAll(".filterCategory").forEach((cb) =>
+  cb.addEventListener("change", () => {
+    updateChart();
+    displayCategoryTotals(); // Add this line
+  })
+);
 
 // When the document is fully loaded, render the transactions and the chart
 document.addEventListener("DOMContentLoaded", () => {
   displayTransactions();
   updateChart();
+  displayCategoryTotals(); // Add this line
 });
