@@ -98,7 +98,19 @@ export function updateChart() {
   const groupedData = groupByQuarter(filteredTransactions);
 
   // Ensure the order of years is maintained
-  const orderedYears = ["2021", "2022", "2023", "2024"];
+  // Updated orderedYears to include years from 2016 to 2024
+  const orderedYears = [
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+  ];
+
   const labels = [];
   const datasets = [];
 
