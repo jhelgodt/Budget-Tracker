@@ -254,6 +254,8 @@ const categoryKeywords = {
     "ultraljud",
     "vaccin",
   ],
+  Property: ["property", "house purchase", "mortgage"],
+  Vacation: ["flight", "hotel", "vacation", "travel", "holiday"],
   "Food and Beverage": [
     "restaurant",
     "cafe",
