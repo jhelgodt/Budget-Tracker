@@ -217,6 +217,7 @@ const categoryKeywords = {
     "yasuragi",
     "toni & guy",
     "xinglin",
+    "gymgrossisten",
     "hargenget",
     "jesseelder",
     "jawzr",
@@ -283,7 +284,6 @@ const categoryKeywords = {
     "golfklubb",
     "golfer",
     "golfförbundet",
-    "gym",
     "hale",
     "henrik eriksson",
     "jesper söderman",
@@ -498,6 +498,13 @@ document.getElementById("showIncome").addEventListener("change", () => {
 document.getElementById("showExpenses").addEventListener("change", () => {
   updateChart();
   displayCategoryTotals(); // Add this line
+});
+
+document.querySelectorAll('input[name="viewMode"]').forEach((radio) => {
+  radio.addEventListener("change", () => {
+    updateChart();
+    displayCategoryTotals();
+  });
 });
 document.querySelectorAll(".filterYear").forEach((cb) =>
   cb.addEventListener("change", () => {

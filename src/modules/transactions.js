@@ -1,21 +1,13 @@
 // modules/transactions.js
 
-// Import necessary dependencies
 import Chart from "chart.js/auto";
 
-// Define an array of transactions
 export const transactions = [];
-// Add more transactions as needed
 
-// Function to display transactions in the table
-// modules/transactions.js
-
-// Function to display transactions in the table
 export function displayTransactions() {
   const tableBody = document.querySelector("#transactionTable tbody");
   tableBody.innerHTML = "";
 
-  // Group transactions by category
   const transactionsByCategory = transactions.reduce((acc, transaction) => {
     if (!acc[transaction.category]) {
       acc[transaction.category] = [];
@@ -24,16 +16,13 @@ export function displayTransactions() {
     return acc;
   }, {});
 
-  // Get categories sorted alphabetically
   const sortedCategories = Object.keys(transactionsByCategory).sort();
 
   sortedCategories.forEach((category) => {
-    // Sort transactions within the category by amount in descending order
     const sortedTransactions = transactionsByCategory[category].sort(
       (a, b) => b.amount - a.amount
     );
 
-    // Render transactions in the table
     sortedTransactions.forEach((transaction) => {
       const row = document.createElement("tr");
       row.innerHTML = `
@@ -77,14 +66,35 @@ function groupByQuarter(transactions) {
   return groupedData;
 }
 
-// Variable to store the chart instance
+function groupByYear(transactions) {
+  const groupedData = {};
+
+  transactions.forEach((transaction) => {
+    const date = new Date(transaction.date);
+    const year = date.getFullYear();
+
+    if (!groupedData[year]) {
+      groupedData[year] = {};
+    }
+    if (!groupedData[year][transaction.category]) {
+      groupedData[year][transaction.category] = 0;
+    }
+
+    groupedData[year][transaction.category] += transaction.amount;
+  });
+
+  return groupedData;
+}
+
 let transactionChart;
 
-// Function to update the chart
 export function updateChart() {
   const ctx = document.getElementById("transactionChart").getContext("2d");
   const showIncome = document.getElementById("showIncome").checked;
   const showExpenses = document.getElementById("showExpenses").checked;
+  const viewMode = document.querySelector(
+    'input[name="viewMode"]:checked'
+  ).value;
 
   const selectedYears = Array.from(
     document.querySelectorAll(".filterYear:checked")
@@ -118,10 +128,11 @@ export function updateChart() {
     );
   });
 
-  const groupedData = groupByQuarter(filteredTransactions);
+  const groupedData =
+    viewMode === "quarterly"
+      ? groupByQuarter(filteredTransactions)
+      : groupByYear(filteredTransactions);
 
-  // Ensure the order of years is maintained
-  // Updated orderedYears to include years from 2016 to 2024
   const orderedYears = [
     "2016",
     "2017",
@@ -137,13 +148,21 @@ export function updateChart() {
   const labels = [];
   const datasets = [];
 
-  orderedYears.forEach((year) => {
-    if (selectedYears.includes(year)) {
-      for (let q = 1; q <= 4; q++) {
-        labels.push(`${year} Q${q}`);
+  if (viewMode === "quarterly") {
+    orderedYears.forEach((year) => {
+      if (selectedYears.includes(year)) {
+        for (let q = 1; q <= 4; q++) {
+          labels.push(`${year} Q${q}`);
+        }
       }
-    }
-  });
+    });
+  } else {
+    orderedYears.forEach((year) => {
+      if (selectedYears.includes(year)) {
+        labels.push(year);
+      }
+    });
+  }
 
   const categoryData = {};
   selectedCategories.forEach((category) => {
@@ -152,13 +171,21 @@ export function updateChart() {
 
   Object.keys(groupedData).forEach((year) => {
     if (orderedYears.includes(year)) {
-      Object.keys(groupedData[year]).forEach((quarter) => {
-        const label = `${year} Q${quarter}`;
-        const index = labels.indexOf(label);
-        Object.keys(groupedData[year][quarter]).forEach((category) => {
-          categoryData[category][index] = groupedData[year][quarter][category];
+      if (viewMode === "quarterly") {
+        Object.keys(groupedData[year]).forEach((quarter) => {
+          const label = `${year} Q${quarter}`;
+          const index = labels.indexOf(label);
+          Object.keys(groupedData[year][quarter]).forEach((category) => {
+            categoryData[category][index] =
+              groupedData[year][quarter][category];
+          });
         });
-      });
+      } else {
+        const index = labels.indexOf(year);
+        Object.keys(groupedData[year]).forEach((category) => {
+          categoryData[category][index] = groupedData[year][category];
+        });
+      }
     }
   });
 
@@ -193,14 +220,12 @@ export function updateChart() {
       },
     });
   }
-  // Call displayCategoryTotals to update the category totals table
   displayCategoryTotals();
 }
 
-// Function to calculate and display category totals
 export function displayCategoryTotals() {
   const tableBody = document.querySelector("#categoryTotalsTable tbody");
-  tableBody.innerHTML = ""; // Clear existing totals
+  tableBody.innerHTML = "";
 
   const showIncome = document.getElementById("showIncome").checked;
   const showExpenses = document.getElementById("showExpenses").checked;
@@ -236,20 +261,23 @@ export function displayCategoryTotals() {
       categoryMatch
     );
   });
-  // Calculate totals for each category
-  const categoryTotals = {};
-  filteredTransactions.forEach((transaction) => {
-    if (!categoryTotals[transaction.category]) {
-      categoryTotals[transaction.category] = 0;
-    }
-    categoryTotals[transaction.category] += transaction.amount;
-  });
 
-  // Display totals in the table
-  Object.keys(categoryTotals).forEach((category) => {
+  const totals = filteredTransactions.reduce((acc, transaction) => {
+    if (!acc[transaction.category]) {
+      acc[transaction.category] = 0;
+    }
+    acc[transaction.category] += transaction.amount;
+    return acc;
+  }, {});
+
+  const sortedCategories = Object.keys(totals).sort();
+
+  sortedCategories.forEach((category) => {
     const row = document.createElement("tr");
-    row.innerHTML = `<td>${category}</td>
-    <td>${categoryTotals[category].toFixed(2)}</td>`;
+    row.innerHTML = `
+      <td>${category}</td>
+      <td>${totals[category].toFixed(2)}</td>
+    `;
     tableBody.appendChild(row);
   });
 }
