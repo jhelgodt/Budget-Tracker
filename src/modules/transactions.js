@@ -8,20 +8,43 @@ export const transactions = [];
 // Add more transactions as needed
 
 // Function to display transactions in the table
+// modules/transactions.js
+
+// Function to display transactions in the table
 export function displayTransactions() {
   const tableBody = document.querySelector("#transactionTable tbody");
   tableBody.innerHTML = "";
 
-  transactions.forEach((transaction) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${transaction.type}</td>
-      <td>${transaction.description}</td>
-      <td>${transaction.category}</td>
-      <td>${transaction.amount}</td>
-      <td>${new Date(transaction.date).toLocaleDateString()}</td>
-    `;
-    tableBody.appendChild(row);
+  // Group transactions by category
+  const transactionsByCategory = transactions.reduce((acc, transaction) => {
+    if (!acc[transaction.category]) {
+      acc[transaction.category] = [];
+    }
+    acc[transaction.category].push(transaction);
+    return acc;
+  }, {});
+
+  // Get categories sorted alphabetically
+  const sortedCategories = Object.keys(transactionsByCategory).sort();
+
+  sortedCategories.forEach((category) => {
+    // Sort transactions within the category by amount in descending order
+    const sortedTransactions = transactionsByCategory[category].sort(
+      (a, b) => b.amount - a.amount
+    );
+
+    // Render transactions in the table
+    sortedTransactions.forEach((transaction) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${transaction.type}</td>
+        <td>${transaction.description}</td>
+        <td>${transaction.category}</td>
+        <td>${transaction.amount}</td>
+        <td>${new Date(transaction.date).toLocaleDateString()}</td>
+      `;
+      tableBody.appendChild(row);
+    });
   });
 }
 
