@@ -217,6 +217,21 @@ export function updateChart() {
     borderWidth: 2, // Make the line a bit thicker
   });
 
+  // Calculate the average total amount
+  const totalSum = totalData.reduce((acc, val) => acc + val, 0);
+  const averageTotalAmount = totalSum / totalData.length;
+  const averageTotalData = new Array(labels.length).fill(averageTotalAmount);
+
+  // Add the average total amount dataset
+  datasets.push({
+    label: "Average Total Amount",
+    data: averageTotalData,
+    fill: false,
+    borderColor: "#FF0000", // Red color for average line
+    tension: 0.1,
+    borderDash: [10, 5], // Dashed line for the average
+  });
+
   const data = {
     labels: labels,
     datasets: datasets,
