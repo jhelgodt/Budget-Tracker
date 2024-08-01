@@ -199,6 +199,24 @@ export function updateChart() {
     });
   });
 
+  // Calculate the total amount for the selected categories
+  const totalData = new Array(labels.length).fill(0);
+  labels.forEach((label, index) => {
+    selectedCategories.forEach((category) => {
+      totalData[index] += categoryData[category][index];
+    });
+  });
+
+  // Add the total amount dataset
+  datasets.push({
+    label: "Total Amount",
+    data: totalData,
+    fill: false,
+    borderColor: "#000000", // Black color for total line
+    tension: 0.1,
+    borderWidth: 2, // Make the line a bit thicker
+  });
+
   const data = {
     labels: labels,
     datasets: datasets,
