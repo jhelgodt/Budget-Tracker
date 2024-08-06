@@ -58,7 +58,7 @@
             2017</label
           >
           <label
-            ><input type="checkbox" class="filterYear" value="2016" checked />
+            ><input type="checkbox" class="filterYear" value="2016" />
             2016</label
           >
         </div>
@@ -124,7 +124,12 @@
           </label>
           <h3>Filter by Category</h3>
           <label>
-            <input type="checkbox" class="filterCategory" value="Clothes" />
+            <input
+              type="checkbox"
+              class="filterCategory"
+              value="Clothes"
+              checked
+            />
             Clothes
           </label>
           <label>
@@ -132,6 +137,7 @@
               type="checkbox"
               class="filterCategory"
               value="ElectronicsAndGadgets"
+              checked
             />
             Electronics and Gadgets
           </label>
@@ -140,6 +146,7 @@
               type="checkbox"
               class="filterCategory"
               value="Entertainment"
+              checked
             />
             Entertainment
           </label>
@@ -153,11 +160,21 @@
             Food and Beverage
           </label>
           <label>
-            <input type="checkbox" class="filterCategory" value="Groceries" />
+            <input
+              type="checkbox"
+              class="filterCategory"
+              value="Groceries"
+              checked
+            />
             Groceries
           </label>
           <label>
-            <input type="checkbox" class="filterCategory" value="Health" />
+            <input
+              type="checkbox"
+              class="filterCategory"
+              value="Health"
+              checked
+            />
             Health
           </label>
           <label>
@@ -165,6 +182,7 @@
               type="checkbox"
               class="filterCategory"
               value="HouseholdItems"
+              checked
             />
             Household Items
           </label>
@@ -173,6 +191,7 @@
               type="checkbox"
               class="filterCategory"
               value="Miscellaneous"
+              checked
             />
             Miscellaneous
           </label>
@@ -181,6 +200,7 @@
               type="checkbox"
               class="filterCategory"
               value="PersonalCare"
+              checked
             />
             Personal Care
           </label>
@@ -205,7 +225,12 @@
             Savings
           </label>
           <label>
-            <input type="checkbox" class="filterCategory" value="Sports" />
+            <input
+              type="checkbox"
+              class="filterCategory"
+              value="Sports"
+              checked
+            />
             Sports
           </label>
           <label>
@@ -229,6 +254,7 @@
               type="checkbox"
               class="filterCategory"
               value="Transportation"
+              checked
             />
             Transportation
           </label>
@@ -237,11 +263,21 @@
             Undefined
           </label>
           <label>
-            <input type="checkbox" class="filterCategory" value="Utilities" />
+            <input
+              type="checkbox"
+              class="filterCategory"
+              value="Utilities"
+              checked
+            />
             Utilities
           </label>
           <label>
-            <input type="checkbox" class="filterCategory" value="Vacation" />
+            <input
+              type="checkbox"
+              class="filterCategory"
+              value="Vacation"
+              checked
+            />
             Vacation
           </label>
         </div>
@@ -253,9 +289,13 @@
         <div id="goalStatus"></div>
       </div>
       <div id="goal-section">
-        <h3>Goal: Keep total income and expenses above -200,000 SEK</h3>
+        <h3>
+          Goal: Keep sum of income and expenses above -200 000 SEK for 2024
+        </h3>
         <p id="currentTotal">Current Total: 0 SEK</p>
       </div>
+
+      <canvas id="transactionChart" width="800" height="600"></canvas>
       <table id="categoryTotalsTable">
         <thead>
           <tr>
@@ -267,7 +307,6 @@
           <!-- Totals will be added here dynamically -->
         </tbody>
       </table>
-      <canvas id="transactionChart" width="800" height="600"></canvas>
       <textarea
         id="transactionInput"
         placeholder="Enter transactions..."
