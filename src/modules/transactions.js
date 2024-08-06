@@ -307,23 +307,16 @@ export function displayCategoryTotals() {
   const selectedYears = Array.from(
     document.querySelectorAll(".filterYear:checked")
   ).map((cb) => cb.value);
-  const selectedMonths = Array.from(
-    document.querySelectorAll(".filterMonth:checked")
-  ).map((cb) => cb.value);
   const selectedCategories = Array.from(
     document.querySelectorAll(".filterCategory:checked")
   ).map((cb) => cb.value);
 
+  // Filter and group transactions
   const filteredTransactions = transactions.filter((transaction) => {
     const transactionDate = new Date(transaction.date);
     const yearMatch =
       selectedYears.length === 0 ||
       selectedYears.includes(transactionDate.getFullYear().toString());
-    const monthMatch =
-      selectedMonths.length === 0 ||
-      selectedMonths.includes(
-        (transactionDate.getMonth() + 1).toString().padStart(2, "0")
-      );
     const categoryMatch =
       selectedCategories.length === 0 ||
       selectedCategories.includes(transaction.category);
@@ -331,27 +324,45 @@ export function displayCategoryTotals() {
       ((showIncome && transaction.type === "income") ||
         (showExpenses && transaction.type === "expense")) &&
       yearMatch &&
-      monthMatch &&
       categoryMatch
     );
   });
 
-  const totals = filteredTransactions.reduce((acc, transaction) => {
-    if (!acc[transaction.category]) {
-      acc[transaction.category] = 0;
-    }
-    acc[transaction.category] += transaction.amount;
-    return acc;
-  }, {});
+  // Group transactions by year and category
+  const totalsByYearAndCategory = filteredTransactions.reduce(
+    (acc, transaction) => {
+      const date = new Date(transaction.date);
+      const year = date.getFullYear();
 
-  const sortedCategories = Object.keys(totals).sort();
+      if (!acc[year]) {
+        acc[year] = {};
+      }
 
-  sortedCategories.forEach((category) => {
+      if (!acc[year][transaction.category]) {
+        acc[year][transaction.category] = 0;
+      }
+
+      acc[year][transaction.category] += transaction.amount;
+      return acc;
+    },
+    {}
+  );
+
+  // Create table rows for each year and category
+  selectedYears.forEach((year) => {
     const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${category}</td>
-      <td>${totals[category].toFixed(2)}</td>
-    `;
+    row.innerHTML = `<td colspan="2"><strong>${year}</strong></td>`;
     tableBody.appendChild(row);
+
+    if (totalsByYearAndCategory[year]) {
+      Object.keys(totalsByYearAndCategory[year]).forEach((category) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${category}</td>
+          <td>${totalsByYearAndCategory[year][category].toFixed(2)}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
   });
 }
