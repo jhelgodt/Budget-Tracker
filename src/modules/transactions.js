@@ -254,6 +254,47 @@ export function updateChart() {
     });
   }
   displayCategoryTotals();
+
+  // Calculate total income and expenses
+  const totalIncome = filteredTransactions
+    .filter((t) => t.type === "income")
+    .reduce((sum, t) => sum + t.amount, 0);
+  const totalExpenses = filteredTransactions
+    .filter((t) => t.type === "expense")
+    .reduce((sum, t) => sum + t.amount, 0);
+  const currentTotal = totalIncome - totalExpenses;
+  document.getElementById(
+    "currentTotal"
+  ).innerText = `Current Total: ${currentTotal.toLocaleString()} SEK`;
+
+  // Add goal line
+  const goalLine = {
+    label: "Goal (-200,000 SEK)",
+    data: new Array(labels.length).fill(-200000),
+    borderColor: "red",
+    borderWidth: 2,
+    borderDash: [10, 5],
+    fill: false,
+    pointRadius: 0,
+  };
+
+  transactionChart.data.datasets.push(goalLine);
+  transactionChart.update();
+
+  if (currentTotal < -200000) {
+    document.getElementById("currentTotal").style.color = "red";
+  } else {
+    document.getElementById("currentTotal").style.color = "green";
+  }
+}
+
+function getRandomColor() {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
 }
 
 export function displayCategoryTotals() {
