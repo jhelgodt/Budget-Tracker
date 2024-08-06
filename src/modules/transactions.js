@@ -299,7 +299,11 @@ function getRandomColor() {
 
 export function displayCategoryTotals() {
   const tableBody = document.querySelector("#categoryTotalsTable tbody");
+  const tableHead = document.querySelector("#categoryTotalsTable thead");
+
+  // Clear the existing table data
   tableBody.innerHTML = "";
+  tableHead.innerHTML = "<tr><th>Category</th></tr>";
 
   const showIncome = document.getElementById("showIncome").checked;
   const showExpenses = document.getElementById("showExpenses").checked;
@@ -328,41 +332,49 @@ export function displayCategoryTotals() {
     );
   });
 
-  // Group transactions by year and category
-  const totalsByYearAndCategory = filteredTransactions.reduce(
+  // Group transactions by category and year
+  const totalsByCategoryAndYear = filteredTransactions.reduce(
     (acc, transaction) => {
       const date = new Date(transaction.date);
       const year = date.getFullYear();
 
-      if (!acc[year]) {
-        acc[year] = {};
+      if (!acc[transaction.category]) {
+        acc[transaction.category] = {};
       }
 
-      if (!acc[year][transaction.category]) {
-        acc[year][transaction.category] = 0;
+      if (!acc[transaction.category][year]) {
+        acc[transaction.category][year] = 0;
       }
 
-      acc[year][transaction.category] += transaction.amount;
+      acc[transaction.category][year] += transaction.amount;
       return acc;
     },
     {}
   );
 
-  // Create table rows for each year and category
-  selectedYears.forEach((year) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `<td colspan="2"><strong>${year}</strong></td>`;
-    tableBody.appendChild(row);
+  // Create table header row with years
+  const headerRow = document.createElement("tr");
+  headerRow.innerHTML =
+    "<th>Category</th>" +
+    selectedYears.map((year) => `<th>${year}</th>`).join("");
+  tableHead.appendChild(headerRow);
 
-    if (totalsByYearAndCategory[year]) {
-      Object.keys(totalsByYearAndCategory[year]).forEach((category) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${category}</td>
-          <td>${totalsByYearAndCategory[year][category].toFixed(2)}</td>
-        `;
-        tableBody.appendChild(row);
-      });
-    }
+  // Create table rows for each category
+  Object.keys(totalsByCategoryAndYear).forEach((category) => {
+    const row = document.createElement("tr");
+    const rowData =
+      `<td>${category}</td>` +
+      selectedYears
+        .map(
+          (year) =>
+            `<td>${
+              totalsByCategoryAndYear[category][year]
+                ? totalsByCategoryAndYear[category][year].toFixed(2)
+                : "0.00"
+            }</td>`
+        )
+        .join("");
+    row.innerHTML = rowData;
+    tableBody.appendChild(row);
   });
 }
