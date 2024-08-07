@@ -269,6 +269,7 @@ export function updateChart() {
     "Transportation",
     "ElectronicsAndGadgets",
     "HouseholdItems",
+    "Vacation",
   ];
 
   // Define the annual budget for 2024 (example value, adjust as needed)
@@ -326,33 +327,61 @@ export function updateChart() {
   }
   function displayRemainingBudget(remainingBudget) {
     const categoryPercentages = {
-      Groceries: 17.53,
-      Entertainment: 2.09,
-      Clothes: 5.11,
-      RentAndMortgage: 28.56,
-      Utilities: 6.02,
-      Sports: 12.43,
-      FoodAndBeverage: 2.85,
-      Miscellaneous: 1.76,
-      Health: 1.32,
-      PersonalCare: 12.01,
-      Transportation: 3.93,
-      ElectronicsAndGadgets: 3.7,
-      HouseholdItems: 2.7,
+      Groceries: 20,
+      Savings: 17,
+      "Rent and Mortgage": 15,
+      Sports: 10,
+      "Personal Care": 8,
+      Utilities: 8,
+      Transportation: 5,
+      Clothes: 4,
+      "Electronics and Gadgets": 3,
+      "Food and Beverage": 3,
+      "Household items": 3,
+      Entertainment: 3,
+      Miscellaneous: 2,
+      Health: 2,
+      Vacation: 0,
     };
+    function getRemainingMonthsInYear() {
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+      const currentDay = currentDate.getDate();
+
+      const endOfYear = new Date(currentYear, 11, 31); // December 31 of the current year
+      const totalDaysInMonth = new Date(
+        currentYear,
+        currentMonth + 1,
+        0
+      ).getDate(); // Total days in the current month
+
+      // Calculate the remaining days in the current month
+      const remainingDaysInMonth = totalDaysInMonth - currentDay;
+
+      // Calculate the remaining months and fraction
+      const remainingMonths =
+        11 - currentMonth + remainingDaysInMonth / totalDaysInMonth;
+
+      return remainingMonths;
+    }
+
+    console.log(`Remaining months in the year: ${getRemainingMonthsInYear()}`);
 
     const categoryRemainingBudget = {};
 
     for (const category in categoryPercentages) {
       categoryRemainingBudget[category] =
-        (remainingBudget * categoryPercentages[category]) / 100;
+        (remainingBudget * categoryPercentages[category]) /
+        100 /
+        getRemainingMonthsInYear();
     }
 
     const categoryRemainingBudgetDiv = document.getElementById(
       "categoryRemainingBudget"
     );
     categoryRemainingBudgetDiv.innerHTML =
-      "<h3>Remaining Budget by Category:</h3>";
+      "<h3>Remaining Budget by Category and month for 2024:</h3>";
 
     for (const category in categoryRemainingBudget) {
       const amount = categoryRemainingBudget[category].toFixed(2);
