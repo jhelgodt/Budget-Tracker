@@ -324,6 +324,43 @@ export function updateChart() {
   } else {
     document.getElementById("currentTotal").style.color = "green";
   }
+  function displayRemainingBudget(remainingBudget) {
+    const categoryPercentages = {
+      Groceries: 17.53,
+      Entertainment: 2.09,
+      Clothes: 5.11,
+      RentAndMortgage: 28.56,
+      Utilities: 6.02,
+      Sports: 12.43,
+      FoodAndBeverage: 2.85,
+      Miscellaneous: 1.76,
+      Health: 1.32,
+      PersonalCare: 12.01,
+      Transportation: 3.93,
+      ElectronicsAndGadgets: 3.7,
+      HouseholdItems: 2.7,
+    };
+
+    const categoryRemainingBudget = {};
+
+    for (const category in categoryPercentages) {
+      categoryRemainingBudget[category] =
+        (remainingBudget * categoryPercentages[category]) / 100;
+    }
+
+    const categoryRemainingBudgetDiv = document.getElementById(
+      "categoryRemainingBudget"
+    );
+    categoryRemainingBudgetDiv.innerHTML =
+      "<h3>Remaining Budget by Category:</h3>";
+
+    for (const category in categoryRemainingBudget) {
+      const amount = categoryRemainingBudget[category].toFixed(2);
+      categoryRemainingBudgetDiv.innerHTML += `<p>${category}: ${amount} SEK</p>`;
+    }
+  }
+
+  displayRemainingBudget(remainingBudget2024);
 }
 
 function getRandomColor() {
