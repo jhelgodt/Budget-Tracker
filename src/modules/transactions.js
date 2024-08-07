@@ -271,6 +271,9 @@ export function updateChart() {
     "HouseholdItems",
   ];
 
+  // Define the annual budget for 2024 (example value, adjust as needed)
+  const annualBudget2024 = 250000; // Example budget in SEK
+
   // Filter transactions for the year 2024 and specified categories
   const filtered2024Transactions = transactions.filter((t) => {
     const transactionDate = new Date(t.date);
@@ -290,10 +293,17 @@ export function updateChart() {
     .reduce((sum, t) => sum + t.amount, 0);
 
   const currentTotal = totalIncome2024 + totalExpenses2024;
+  const remainingBudget2024 = annualBudget2024 + currentTotal;
 
+  // Display current total
   document.getElementById(
     "currentTotal"
   ).innerText = `Current Total: ${currentTotal.toLocaleString()} SEK`;
+
+  // Display remaining budget
+  document.getElementById(
+    "remainingBudget"
+  ).innerText = `Remaining Budget: ${remainingBudget2024.toLocaleString()} SEK`;
 
   // Add goal line
   const goalLine = {
