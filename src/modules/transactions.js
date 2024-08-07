@@ -254,15 +254,43 @@ export function updateChart() {
     });
   }
   displayCategoryTotals();
+  // Define the categories to include in the calculation
+  const specifiedCategories = [
+    "Groceries",
+    "Entertainment",
+    "Clothes",
+    "RentAndMortgage",
+    "Utilities",
+    "Sports",
+    "FoodAndBeverage",
+    "Miscellaneous",
+    "Health",
+    "PersonalCare",
+    "Transportation",
+    "ElectronicsAndGadgets",
+    "HouseholdItems",
+  ];
 
-  // Calculate total income and expenses
-  const totalIncome = filteredTransactions
+  // Filter transactions for the year 2024 and specified categories
+  const filtered2024Transactions = transactions.filter((t) => {
+    const transactionDate = new Date(t.date);
+    return (
+      transactionDate.getFullYear() === 2024 &&
+      specifiedCategories.includes(t.category)
+    );
+  });
+
+  // Calculate total income and expenses for the filtered transactions
+  const totalIncome2024 = filtered2024Transactions
     .filter((t) => t.type === "income")
     .reduce((sum, t) => sum + t.amount, 0);
-  const totalExpenses = filteredTransactions
+
+  const totalExpenses2024 = filtered2024Transactions
     .filter((t) => t.type === "expense")
     .reduce((sum, t) => sum + t.amount, 0);
-  const currentTotal = totalIncome - totalExpenses;
+
+  const currentTotal = totalIncome2024 + totalExpenses2024;
+
   document.getElementById(
     "currentTotal"
   ).innerText = `Current Total: ${currentTotal.toLocaleString()} SEK`;
