@@ -269,9 +269,9 @@ export function updateChart() {
 
   // Add goal line
   const goalLine = {
-    label: "Goal (-200,000 SEK)",
-    data: new Array(labels.length).fill(-200000),
-    borderColor: "red",
+    label: "Goal (-250,000 SEK)",
+    data: new Array(labels.length).fill(-250000),
+    borderColor: "orange",
     borderWidth: 2,
     borderDash: [10, 5],
     fill: false,
@@ -281,7 +281,7 @@ export function updateChart() {
   transactionChart.data.datasets.push(goalLine);
   transactionChart.update();
 
-  if (currentTotal < -200000) {
+  if (currentTotal < -250000) {
     document.getElementById("currentTotal").style.color = "red";
   } else {
     document.getElementById("currentTotal").style.color = "green";
@@ -377,4 +377,21 @@ export function displayCategoryTotals() {
     row.innerHTML = rowData;
     tableBody.appendChild(row);
   });
+
+  // Calculate totals for the selected categories
+  const totalRow = document.createElement("tr");
+  totalRow.innerHTML =
+    "<td>Total</td>" +
+    selectedYears
+      .map((year) => {
+        const total = Object.values(totalsByCategoryAndYear).reduce(
+          (sum, categoryTotals) => {
+            return sum + (categoryTotals[year] || 0);
+          },
+          0
+        );
+        return `<td>${total.toFixed(2)}</td>`;
+      })
+      .join("");
+  tableBody.appendChild(totalRow);
 }
