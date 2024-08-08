@@ -115,8 +115,13 @@ const categoryKeywords = {
     "restaurant",
     "sodra teatern",
     "blueberry",
+    "subway",
     "waynes",
     "starbucks",
+    "burger",
+    "matkonst",
+    "bodino",
+    "forno romano",
   ],
   Groceries: [
     "coop",
@@ -148,6 +153,7 @@ const categoryKeywords = {
     "recorganic",
     "veckansmiddag",
     "gardssallskapet",
+    "gbm",
   ],
   Health: [
     "aqua dental",
@@ -338,6 +344,7 @@ const categoryKeywords = {
     "parkering",
     "sl telefonplan",
     "sl t-centralen",
+    "circle k",
   ],
   Undefined: [],
 
@@ -356,6 +363,7 @@ const categoryKeywords = {
   ],
   Utilities: [
     "akassa",
+    "a kassa",
     "bankkort",
     "centrala studiest",
     "csn",
@@ -370,6 +378,8 @@ const categoryKeywords = {
     "tele2",
     "Rörmokare",
     "sveriges ingenjörer",
+    "tre",
+    "adressendring",
   ],
   RentAndMortgage: [
     "427096650421",
@@ -418,6 +428,8 @@ const categoryKeywords = {
     "airbnb * hmz2k9w845, 684-468-1234",
     "airbnb",
     "lysaker",
+    "scandinavia 1174540307356",
+    "stockholm-arl",
   ],
 };
 

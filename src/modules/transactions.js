@@ -343,6 +343,7 @@ export function updateChart() {
       Health: 2,
       Vacation: 0,
     };
+
     function getRemainingMonthsInYear() {
       const currentDate = new Date();
       const currentYear = currentDate.getFullYear();
@@ -366,26 +367,39 @@ export function updateChart() {
       return remainingMonths;
     }
 
-    console.log(`Remaining months in the year: ${getRemainingMonthsInYear()}`);
-
     const categoryRemainingBudget = {};
+    const currentSpending = {}; // Object to hold current month's spending per category
 
+    // Calculate remaining budget per category and current spending for the month
     for (const category in categoryPercentages) {
       categoryRemainingBudget[category] =
         (remainingBudget * categoryPercentages[category]) /
         100 /
         getRemainingMonthsInYear();
+
+      // Calculate the current spending for each category in the current month
+      currentSpending[category] = transactions
+        .filter((t) => {
+          const transactionDate = new Date(t.date);
+          return (
+            transactionDate.getFullYear() === 2024 &&
+            transactionDate.getMonth() === new Date().getMonth() &&
+            t.category === category
+          );
+        })
+        .reduce((sum, t) => sum + t.amount, 0);
     }
 
     const categoryRemainingBudgetDiv = document.getElementById(
       "categoryRemainingBudget"
     );
     categoryRemainingBudgetDiv.innerHTML =
-      "<h3>Remaining Budget by Category and month for 2024:</h3>";
+      "<h3>Remaining Budget by Category and Month for 2024:</h3>";
 
     for (const category in categoryRemainingBudget) {
-      const amount = categoryRemainingBudget[category].toFixed(2);
-      categoryRemainingBudgetDiv.innerHTML += `<p>${category}: ${amount} SEK</p>`;
+      const remainingAmount = categoryRemainingBudget[category].toFixed(2);
+      const currentSpentAmount = currentSpending[category].toFixed(2); // Get current month's spending
+      categoryRemainingBudgetDiv.innerHTML += `<p>${category}: ${remainingAmount} SEK remaining, ${currentSpentAmount} SEK spent this month</p>`;
     }
   }
 
