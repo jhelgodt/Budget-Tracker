@@ -329,15 +329,15 @@ export function updateChart() {
     const categoryPercentages = {
       Groceries: 20,
       Savings: 17,
-      "Rent and Mortgage": 15,
+      RentAndMortgage: 15,
       Sports: 10,
-      "Personal Care": 8,
+      PersonalCare: 8,
       Utilities: 8,
       Transportation: 5,
       Clothes: 4,
-      "Electronics and Gadgets": 3,
-      "Food and Beverage": 3,
-      "Household items": 3,
+      ElectronicsAndGadgets: 3,
+      FoodAndBeverage: 3,
+      HouseholdItems: 3,
       Entertainment: 3,
       Miscellaneous: 2,
       Health: 2,
@@ -368,22 +368,23 @@ export function updateChart() {
     }
 
     const categoryRemainingBudget = {};
-    const currentSpending = {}; // Object to hold current month's spending per category
+    const currentSpendingThisAndLastMonth = {}; // Object to hold current and last month's spending per category
 
-    // Calculate remaining budget per category and current spending for the month
+    // Calculate remaining budget per category and current spending for the month and last month
     for (const category in categoryPercentages) {
       categoryRemainingBudget[category] =
-        (remainingBudget * categoryPercentages[category]) /
+        (remainingBudget * categoryPercentages[category] * 2) /
         100 /
         getRemainingMonthsInYear();
 
-      // Calculate the current spending for each category in the current month
-      currentSpending[category] = transactions
+      // Calculate the current spending for each category in the current month plus last month
+      currentSpendingThisAndLastMonth[category] = transactions
         .filter((t) => {
           const transactionDate = new Date(t.date);
           return (
             transactionDate.getFullYear() === 2024 &&
-            transactionDate.getMonth() === new Date().getMonth() &&
+            (transactionDate.getMonth() === new Date().getMonth() ||
+              transactionDate.getMonth() === new Date().getMonth() - 1) &&
             t.category === category
           );
         })
@@ -394,12 +395,13 @@ export function updateChart() {
       "categoryRemainingBudget"
     );
     categoryRemainingBudgetDiv.innerHTML =
-      "<h3>Remaining Budget by Category and Month for 2024:</h3>";
+      "<h3>Remaining Budget by Category and two months for 2024:</h3>";
 
     for (const category in categoryRemainingBudget) {
       const remainingAmount = categoryRemainingBudget[category].toFixed(2);
-      const currentSpentAmount = currentSpending[category].toFixed(2); // Get current month's spending
-      categoryRemainingBudgetDiv.innerHTML += `<p>${category}: ${remainingAmount} SEK remaining, ${currentSpentAmount} SEK spent this month</p>`;
+      const currentSpentAmount =
+        currentSpendingThisAndLastMonth[category].toFixed(2); // Get current month's spending + last months spending
+      categoryRemainingBudgetDiv.innerHTML += `<p>${category}: ${remainingAmount} SEK remaining, ${-currentSpentAmount} SEK spent this month and last month</p>`;
     }
   }
 
