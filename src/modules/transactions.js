@@ -299,7 +299,7 @@ export function updateChart() {
   // Display current total
   document.getElementById(
     "currentTotal"
-  ).innerText = `Current Total: ${currentTotal.toLocaleString()} SEK`;
+  ).innerText = `Total spending so far this year: ${-currentTotal.toLocaleString()} SEK`;
 
   // Display remaining budget
   document.getElementById(
